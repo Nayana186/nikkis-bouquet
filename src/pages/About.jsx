@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import emailjs from "emailjs-com"; // ✅ import emailjs
 import "./About.css";
 
 export default function About() {
@@ -14,23 +15,20 @@ export default function About() {
     e.preventDefault();
     setLoading(true);
 
-   try {
-  const response = await fetch("https://nikkis-bouquet.onrender.com/api/send-message", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(formData),
-  });
+    try {
+      // ✅ replace with your actual EmailJS IDs
+      await emailjs.send(
+        "service_x6qb14c",   // from EmailJS
+        "template_vttel7r",  // from EmailJS
+        formData,
+        "HVZkw2-T2pYr0FRWy"    // from EmailJS
+      );
 
-
-      if (response.ok) {
-        setIsSent(true);
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        alert("Oops! Something went wrong 💔");
-      }
+      setIsSent(true);
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      console.error("Backend error:", error);
-      alert("Server not reachable. Check your backend connection ⚙️");
+      console.error("EmailJS error:", error);
+      alert("Oops! Couldn’t send your message 💔");
     } finally {
       setLoading(false);
     }

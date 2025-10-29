@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import emailjs from "emailjs-com"; // ✅ import emailjs
+import emailjs from "@emailjs/browser"; // ✅ correct import
 import "./About.css";
 
 export default function About() {
@@ -16,18 +16,22 @@ export default function About() {
     setLoading(true);
 
     try {
-      // ✅ replace with your actual EmailJS IDs
-      await emailjs.send(
-        "service_x6qb14c",   // from EmailJS
-        "template_vttel7r",  // from EmailJS
-        formData,
-        "HVZkw2-T2pYr0FRWy"    // from EmailJS
+      const result = await emailjs.send(
+        "service_x6qb14c",   // 🔹 replace with your EmailJS Service ID
+        "template_64392am",  // 🔹 replace with your Template ID
+        {
+          from_name: formData.name,
+          reply_to: formData.email,
+          message: formData.message,
+        },
+        "HVZkw2-T2pYr0FRWy"  // 🔹 your Public Key
       );
 
+      console.log("✅ Email sent:", result.text);
       setIsSent(true);
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      console.error("EmailJS error:", error);
+      console.error("❌ EmailJS error:", error);
       alert("Oops! Couldn’t send your message 💔");
     } finally {
       setLoading(false);
@@ -70,16 +74,6 @@ export default function About() {
           Have a custom idea, a kind word, or just want to chat about crafts?  
           Drop me a message — I’d love to hear from you 💌
         </p>
-
-        <div className="petal-links">
-          <a href="https://instagram.com/yourhandle" target="_blank" rel="noopener noreferrer">
-            🌸 Instagram
-          </a>
-          <a href="mailto:nikki.crafts@example.com">💌 Email</a>
-          <a href="https://wa.me/yourwhatsapplink" target="_blank" rel="noopener noreferrer">
-            🌷 WhatsApp
-          </a>
-        </div>
 
         <form className="query-box" onSubmit={handleSubmit}>
           <h4 className="form-heading">Drop a Message — From One Bloom to Another 💌</h4>
